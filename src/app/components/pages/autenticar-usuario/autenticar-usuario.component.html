@@ -1,0 +1,50 @@
+<div class="mb-3">
+    <h4>Autenticação de usuários</h4>
+    <p>Entre com as suas credenciais de acesso.</p>
+</div>
+<h5 class="text-danger">
+    {{mensagemErro}}
+</h5>
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="row mb-3">
+        <div class="col">
+            <label> Email de acesso: </label>
+            <input type="text" class="form-control" 
+                placeholder="Digite seu email aqui"
+                formControlName="email"/>
+            <div class="text-danger" *ngIf="f['email'].touched && f['email'].invalid">
+                <span *ngIf="f['email'].errors && f['email'].errors['required']">
+                    Por favor, informe o seu email de acesso.
+                </span>
+                <span *ngIf="f['email'].errors && f['email'].errors['email']">
+                    Por favor, informe um endereço de email válido
+                </span>
+            </div>
+        </div>
+
+        <div class="col">
+            <label> Senha de acesso: </label>
+            <input type="password" class="form-control" 
+                placeholder="Digite sua senha aqui"
+                formControlName="senha" />
+            <div class="text-danger" *ngIf="f['senha'].touched && f['senha'].invalid">
+                <span *ngIf="f['senha'].errors && f['senha'].errors['required']">
+                    Por favor, informa a sua senha de acesso (Campo Obrigatório)
+                </span>
+                
+                <span *ngIf="f['senha'].errors && f['senha'].errors['minlength']">
+                    Por favor, informe a senha com pelo menos 8 caracteres
+                </span>
+
+            </div>
+        </div>
+
+        <div class="col">
+            <button type="submit" class="btn btn-primary mt-4" [disabled]="form.invalid"> Acessar Sistema</button>
+        </div>
+    </div>
+</form>
+
+<div class="row mb-3">
+    <small>Sistema de gerenciamento de tarefas v1.0</small>
+</div>
