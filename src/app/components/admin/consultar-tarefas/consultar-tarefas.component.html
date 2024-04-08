@@ -1,6 +1,40 @@
 <div class="mb-3">
     <h4>Consultar tarefas</h4>
     <p>Listagem de tarefas cadastradas em sua agenda.</p>
+
+    <div class="table-responsive">
+      <table class="table table-sm">
+        <thead>
+          <tr >
+            <th>Nome da Tarefa</th>
+            <th>Data</th>
+            <th>Prioridade</th>
+            <th>Operações</th>
+          </tr>
+        </thead>
+
+        <tbody>
+            <tr *ngFor="let t of tarefas">
+              <td>{{t.nome}}  </td>
+              <td>{{t.data}}</td>
+              <td>{{t.prioridade}}</td>
+              <td>
+                <button class="btn btn-sm btn-outline-primary me-2">Editar</button>
+                <button class="btn btn-sm btn-outline-danger">Excluir</button>
+              </td>
+            </tr>
+        </tbody>
+
+        <tfoot>
+          <tr>
+            <td colspan="4">
+              Quantidade de tarefas: {{tarefas.length}}
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+
+    </div>
   </div>
   
   
