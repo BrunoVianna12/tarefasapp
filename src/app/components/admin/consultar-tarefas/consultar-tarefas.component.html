@@ -8,16 +8,19 @@
           <tr >
             <th>Nome da Tarefa</th>
             <th>Data</th>
-            <th>Prioridade</th>
+            <th>Hora</th>
+            <th>Descricao</th>
             <th>Operações</th>
           </tr>
         </thead>
 
         <tbody>
-            <tr *ngFor="let t of tarefas">
-              <td>{{t.nome}}  </td>
-              <td>{{t.data}}</td>
-              <td>{{t.prioridade}}</td>
+            <tr *ngFor="let t of tarefas
+                  | paginate: {itemsPerPage: 5, currentPage: paginador}">
+              <td>{{t.nome | uppercase}}  </td>
+              <td>{{t.data | date: 'dd/MM/yyyy'}}</td>
+              <td>{{t.hora}}</td>
+              <td>{{t.descricao}}</td>
               <td>
                 <button class="btn btn-sm btn-outline-primary me-2">Editar</button>
                 <button class="btn btn-sm btn-outline-danger">Excluir</button>
@@ -27,7 +30,7 @@
 
         <tfoot>
           <tr>
-            <td colspan="4">
+            <td colspan="5">
               Quantidade de tarefas: {{tarefas.length}}
             </td>
           </tr>
@@ -35,6 +38,13 @@
       </table>
 
     </div>
+      <div class="text-center">
+        <!-- Régua de paginação -->
+        <pagination-controls
+        previousLabel="Página anterior"
+        nextLabel="Próxima página"
+        (pageChange)="handlePageChange($event)"
+        />
   </div>
   
   
