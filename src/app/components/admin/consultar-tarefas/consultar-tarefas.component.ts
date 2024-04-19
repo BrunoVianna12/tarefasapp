@@ -3,13 +3,24 @@ import { Component, OnInit } from '@angular/core';
 import { TarefasService } from '../../../services/tarefas.service';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { ConsultarTarefasRespose } from '../../../models/tarefas/consultar-tarefas.response';
+import { error } from 'highcharts';
+import { MessagesComponent } from '../../layout/messages/messages.component';
+import { RouterModule } from '@angular/router';
+import { NgArrayPipesModule } from 'ngx-pipes';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-consultar-tarefas',
   standalone: true,
   imports: [
     CommonModule,
-    NgxPaginationModule
+    NgxPaginationModule,
+    MessagesComponent,
+    RouterModule,
+    NgArrayPipesModule,
+    FormsModule,
+    ReactiveFormsModule 
   ],
   templateUrl: './consultar-tarefas.component.html',
   styleUrl: './consultar-tarefas.component.css'
@@ -17,12 +28,16 @@ import { ConsultarTarefasRespose } from '../../../models/tarefas/consultar-taref
 export class ConsultarTarefasComponent implements OnInit {
   tarefas: ConsultarTarefasRespose [] = [];
   paginador: number = 1;
+  mensagem: string = '';
+  filtro: string = '';
+
   constructor(
-    private tarefasService: TarefasService
+    private tarefasService: TarefasService,
+    private spinnerService: NgxSpinnerService
   ){}
   
   ngOnInit(): void {
-    
+    this.spinnerService.show();
     this.tarefasService.consultar()
       .subscribe({
         next : (data) => {
@@ -31,6 +46,9 @@ export class ConsultarTarefasComponent implements OnInit {
         error: (e) =>{
           console.log(e);
         }
+      })
+      .add(() => {
+        this.spinnerService.hide();
       })
     /*this.tarefas = [
       {nome: 'Tarefa Exemplo 1', data: '08/04/2024', prioridade: 'Alta'},
@@ -41,6 +59,24 @@ export class ConsultarTarefasComponent implements OnInit {
       {nome: 'Tarefa Exemplo 6', data: '13/04/2024', prioridade: 'Baixa'},
 
     ];*/
+  }
+
+  onDelete(id: string) : void {
+    if(confirm('Deseja realmente excluir a tarefa selecionada?')){
+      this.spinnerService.show();
+      this.tarefasService.excluir(id)
+        .subscribe({
+          next: (data) => {
+            this.mensagem = `A tarefa "${data.nome}" foi excluída com sucesso.`;
+            this.ngOnInit();
+          },
+          error: (e) => {
+            console.log(e.error);            
+          }
+        }).add(() => {
+          this.spinnerService.hide();
+        })
+    }
   }
 
   handlePageChange(event: any): void {

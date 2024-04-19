@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Chart, ChartModule } from 'angular-highcharts';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-dashboard',
@@ -18,9 +19,14 @@ export class DashboardComponent implements OnInit {
   graficoLinhas : Chart = new Chart();
   graficoDonut : Chart = new Chart();
   graficoBarras : Chart = new Chart();
+
+  constructor(
+    private spinnerService: NgxSpinnerService
+  ){}
   
   ngOnInit(): void {
     // MOC////////////////////////////////////////////////////////////
+  this.spinnerService.show();
     const dados = [
       ['Exemplo 1',100],
       ['Exemplo 2',150],
@@ -33,6 +39,8 @@ export class DashboardComponent implements OnInit {
     this.criarGraficoLinhas(dados,nomes);
     this.criarGraficoDonut(dados,nomes);
     this.criarGraficoBarras(dados,nomes);
+
+    this.spinnerService.hide();
 
     //////////////////////////////////////////////////////////////////
   }
@@ -90,6 +98,7 @@ export class DashboardComponent implements OnInit {
       legend: {enabled : false},
       credits: {enabled : false }
     });
+    
   }
-
+  
 }

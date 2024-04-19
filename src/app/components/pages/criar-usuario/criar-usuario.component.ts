@@ -6,6 +6,7 @@ import { fromEvent } from 'rxjs';
 import { UsuariosService } from '../../../services/usuarios.service';
 import { CriarUsuarioRequest } from '../../../models/usuarios/criar-usuario.request';
 import { PasswordMatchValidator } from '../../../validators/password-match.validator';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-criar-usuario',
@@ -22,7 +23,8 @@ export class CriarUsuarioComponent {
   mensagemSucesso: string = '';
   mensagemErro: string = '';
   constructor(
-    private usuariosService: UsuariosService
+    private usuariosService: UsuariosService,
+    private spinnerService: NgxSpinnerService
   ){}
 
   form = new FormGroup({
@@ -51,6 +53,7 @@ export class CriarUsuarioComponent {
       email: this.form.value.email as string,
       senha: this.form.value.senha as string
     }
+    this.spinnerService.show()
     this.usuariosService.criar(request)
       .subscribe({
         next: (data) => {
@@ -61,9 +64,10 @@ export class CriarUsuarioComponent {
         error: (e) =>{
           this.mensagemErro = e.error.message;
         }
-      }
-      
-      );
+      })
+      .add(() =>{
+        this.spinnerService.hide();
+      });
     //console.log(this.form.value);
   }
 

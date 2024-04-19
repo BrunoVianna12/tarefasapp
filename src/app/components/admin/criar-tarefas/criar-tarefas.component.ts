@@ -4,6 +4,7 @@ import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { TarefasService } from '../../../services/tarefas.service';
 import { CriarTarefasRequest } from '../../../models/tarefas/criar-tarefas.request';
 import { MessagesComponent } from '../../layout/messages/messages.component';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-criar-tarefas',
@@ -21,7 +22,8 @@ export class CriarTarefasComponent {
   mensagem: string = '';
 
   constructor(
-    private tarefasService: TarefasService
+    private tarefasService: TarefasService,
+    private spinnerService: NgxSpinnerService
   ){}
 
   form = new FormGroup({
@@ -50,6 +52,7 @@ export class CriarTarefasComponent {
       descricao : this.form.value.descricao as string
 
     }
+    this.spinnerService.show();
     this.tarefasService.criar(request).
       subscribe({
         next : (data) => {
@@ -60,6 +63,9 @@ export class CriarTarefasComponent {
         error : (e) =>{
           console.log(e.error);
         }
+      })
+      .add(() =>{
+        this.spinnerService.hide();
       });
     //console.log(this.form.value);
   }

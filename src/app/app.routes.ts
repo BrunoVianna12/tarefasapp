@@ -37,7 +37,7 @@ export const routes: Routes = [
         canActivate: [AuthGuard]
     },
     {
-        path: 'admin/editar-tarefas',
+        path: 'admin/editar-tarefas/:id',
         component: EditarTarefasComponent,
         canActivate: [AuthGuard]
     },
